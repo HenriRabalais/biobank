@@ -89,7 +89,7 @@ class SpecimenTab extends Component {
    * @return {ReactDOM}
    */
   formatSpecimenColumns(column, value, row) {
-    const {options} = this.props;
+    const {data, options} = this.props;
     value = this.mapSpecimenColumns(column, value);
     const candidate = Object.values(options.candidates)
       .find((cand) => cand.pscid == row['PSCID']);
@@ -138,7 +138,11 @@ class SpecimenTab extends Component {
       case 'Projects':
         return <td>{value.join(', ')}</td>;
       case 'Container Barcode':
-        return <td><Link to={`/barcode=${value}`}>{value}</Link></td>;
+        // check if container has be queried
+        if (Object.values(data.containers).find(container => container.barcode == value)) {
+          return <td><Link to={`/barcode=${value}`}>{value}</Link></td>;
+        }
+        return <td>{value}</td>;
       default:
         return <td>{value}</td>;
      }
